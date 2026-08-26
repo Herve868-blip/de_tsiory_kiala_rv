@@ -99,7 +99,7 @@ def main():
         sys.exit(1)
 
     try:
-        df = pd.read_excel(EXCEL_PATH, sheet_name=SHEET_NAME)
+        df = pd.read_excel(EXCEL_PATH, sheet_name=SHEET_NAME, engine='xlrd')
         print(f"  {len(df)} lignes, {len(df.columns)} colonnes")
     except Exception as e:
         print(f"  ERREUR de lecture: {e}")
