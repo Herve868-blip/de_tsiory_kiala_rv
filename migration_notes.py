@@ -8,7 +8,7 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 # ============================================================
 # CONFIG - MODIFIEZ CES PARAMETRES SI BESOIN
 # ============================================================
-EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'de_inscae', 'Gest°_Notes_S°Août 2025.xls')
+EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'de_inscae', 'Gest°_Notes_S°Août 2025.xlsx')
 SHEET_NAME = 'Base_All'
 
 DB_CONFIG = {
@@ -99,7 +99,7 @@ def main():
         sys.exit(1)
 
     try:
-        df = pd.read_excel(EXCEL_PATH, sheet_name=SHEET_NAME, engine='xlrd')
+        df = pd.read_excel(EXCEL_PATH, sheet_name=SHEET_NAME)
         print(f"  {len(df)} lignes, {len(df.columns)} colonnes")
     except Exception as e:
         print(f"  ERREUR de lecture: {e}")
