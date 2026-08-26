@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_ajout_membre_groupe_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_ajout_membre_groupe_fi.form</field>
+        <field name="model">de_inscae.wizard_ajout_membre_groupe_fi</field>
+        <field name="arch" type="xml">
+            <form string="Ajouter des membres au groupe">
+                <sheet>
+                    <group>
+                        <field name="groupe_fi_id" readonly="1"/>
+                        <field name="session_calendrier_fi_id" invisible="1"/>
+                    </group>
+                    <field name="etudiant_session_ids" options="{'no_create': True, 'no_quick_create': True}">
+                        <tree>
+                            <field name="etudiant_fi_id"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer"
+                            type="object"
+                            string="Confirmer"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

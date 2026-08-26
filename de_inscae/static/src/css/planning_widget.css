@@ -1,0 +1,226 @@
+.o_planning_widget {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+    background: #f8f9fa;
+}
+
+/* --- Toolbar --- */
+.o_planning_toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: #fff;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.o_planning_toolbar_left,
+.o_planning_toolbar_right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.o_planning_filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.o_planning_filter label {
+    font-weight: 600;
+    color: #555;
+    margin: 0;
+}
+
+.o_planning_groupe_select,
+.o_planning_date_filter {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 13px;
+    color: #333;
+}
+
+.o_planning_layout_switch {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.o_planning_btn_layout {
+    border: none;
+    border-radius: 0;
+    background: #fff;
+    color: #555;
+    font-size: 12px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.o_planning_btn_layout:hover {
+    background: #f0f0f0;
+}
+
+.o_planning_btn_layout.active {
+    background: #875A7B;
+    color: #fff;
+}
+
+.o_planning_btn_add {
+    font-size: 12px;
+}
+
+/* --- Grille --- */
+.o_planning_grid_container {
+    flex: 1;
+    overflow: auto;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.o_planning_grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* Headers */
+.o_planning_grid thead th {
+    background: #875A7B;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    padding: 10px 8px;
+    border: 1px solid #7a5070;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.o_planning_grid thead th.o_planning_th_header {
+    background: #6d4663;
+    width: 100px;
+}
+
+/* Lignes */
+.o_planning_grid tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.o_planning_grid tbody td {
+    border: 1px solid #e8e8e8;
+    vertical-align: top;
+    padding: 4px;
+    min-height: 80px;
+    min-width: 120px;
+}
+
+.o_planning_grid tbody td.o_planning_td_header {
+    background: #f5f0f5;
+    font-weight: 600;
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+}
+
+/* Cellule drop target */
+.o_planning_cell {
+    min-height: 80px;
+    height: 100%;
+}
+
+.o_planning_cell.o_planning_drag_over {
+    background: #e8f4fd;
+    border: 2px dashed #875A7B;
+}
+
+/* --- Cours --- */
+.o_planning_cours {
+    border-radius: 4px;
+    padding: 5px 7px;
+    margin-bottom: 3px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    position: relative;
+}
+
+.o_planning_cours:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.o_planning_cours.dragging {
+    opacity: 0.4;
+}
+
+/* FI : violet */
+.o_planning_cours_fi {
+    background: #e8d5f0;
+    border-left: 3px solid #875A7B;
+    color: #4a2060;
+}
+
+/* FC : bleu */
+.o_planning_cours_fc {
+    background: #d5e8f8;
+    border-left: 3px solid #2678c8;
+    color: #1a4a80;
+}
+
+.o_planning_cours_matiere {
+    font-weight: 700;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_planning_cours_groupe,
+.o_planning_cours_prof,
+.o_planning_cours_salle {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.85;
+}
+
+.o_planning_cours i {
+    width: 12px;
+    text-align: center;
+    margin-right: 2px;
+}
+
+/* --- Loader --- */
+.o_planning_loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #875A7B;
+}
+
+.o_planning_cours_dates {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.75;
+    margin-top: 3px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 2px;
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_matiere_prof_groupe_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.matiere_prof_groupe_fi.form</field>
+        <field name="model">de_inscae.matiere_prof_groupe_fi</field>
+        <field name="arch" type="xml">
+            <form string="Notes">
+                <header>
+                    <button name="action_verrouiller_notes"
+                            type="object"
+                            string="Verrouiller les Notes"
+                            class="btn-primary"
+                            confirm="Voulez-vous vraiment verrouiller les notes ? Les notes verrouillées ne peuvent plus être modifiées. Vérifiez que toutes les notes sont correctes avant de les verrouiller. Cette action est irréversible."
+                            attrs="{'invisible': [('notes_verrouillees', '=', True)]}"/>
+                    <field name="notes_verrouillees" widget="boolean" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="matiere_id" readonly="1"/>
+                        <field name="prof_id"
+                               attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                        <field name="ponderation_quizz"/>
+                        <field name="ponderation_intra"/>
+                        <field name="ponderation_examen_final"/>
+                        <field name="notes_verrouillees" invisible="1"/>
+                        <field name="groupe_fi_id" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note_ids"
+                                   context="{'default_groupe_fi_id': groupe_fi_id}">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="groupe_fi_id"
+                                           attrs="{'column_invisible': [('parent.id', '!=', 0)]}"/>
+                                    <field name="etudiant_session_fi_id"
+                                           domain="[('groupe_fi_id', '=', context.get('default_groupe_fi_id', False))]"
+                                           attrs="{'readonly': [('parent.notes_verrouillees', '=', True)]}"/>
+                                    <field name="note_quizz"
+                                           attrs="{'readonly': [('parent.notes_verrouillees', '=', True)]}"/>
+                                    <field name="note_intra"
+                                           attrs="{'readonly': [('parent.notes_verrouillees', '=', True)]}"/>
+                                    <field name="note_examen_final"
+                                           attrs="{'readonly': [('parent.notes_verrouillees', '=', True)]}"/>
+                                    <field name="moyenne" readonly="1"/>
+                                    <field name="est_delibere" invisible="1"/>
+                                    <field name="resultat"
+                                           readonly="1"
+                                           decoration-success="resultat in ('admis', 'admis_ap_deliberation')"
+                                           decoration-warning="resultat == 'deliberation'"
+                                           decoration-danger="resultat == 'refuse'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

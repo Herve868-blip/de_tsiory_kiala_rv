@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_wizard_inscription_concours_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_inscription_concours_fc.form</field>
+        <field name="model">de_inscae.wizard_inscription_concours_fc</field>
+        <field name="arch" type="xml">
+            <form string="Inscrire depuis le concours FC">
+                <sheet>
+                    <group>
+                        <field name="session_calendrier_fc_id" readonly="1"/>
+                    </group>
+                    <field name="candidat_ids" options="{'no_create': True, 'no_quick_create': True}">
+                        <tree>
+                            <field name="individu_id"/>
+                            <field name="concours_id"/>
+                            <field name="resultat"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer" type="object"
+                            string="Confirmer" class="btn-primary"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="view_wizard_inscription_precedente_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_inscription_precedente_fc.form</field>
+        <field name="model">de_inscae.wizard_inscription_precedente_fc</field>
+        <field name="arch" type="xml">
+            <form string="Inscrire depuis la session FC précédente">
+                <sheet>
+                    <group>
+                        <field name="session_calendrier_fc_id" readonly="1"/>
+                    </group>
+                    <field name="etudiant_session_ids" options="{'no_create': True, 'no_quick_create': True}">
+                        <tree>
+                            <field name="etudiant_fc_id"/>
+                            <field name="resultat_session"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer" type="object"
+                            string="Confirmer" class="btn-primary"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="view_wizard_inscription_transfere_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_inscription_transfere_fi.form</field>
+        <field name="model">de_inscae.wizard_inscription_transfere_fi</field>
+        <field name="arch" type="xml">
+            <form string="Inscrire transférés FI vers FC">
+                <sheet>
+                    <group>
+                        <field name="session_calendrier_fc_id" readonly="1"/>
+                    </group>
+                    <field name="etudiant_session_fi_ids" options="{'no_create': True, 'no_quick_create': True}">
+                        <tree>
+                            <field name="etudiant_fi_id"/>
+                            <field name="session_calendrier_fi_id"/>
+                            <field name="resultat_session"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer" type="object"
+                            string="Confirmer" class="btn-primary"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

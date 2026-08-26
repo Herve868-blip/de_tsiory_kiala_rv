@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="de_inscae.PlanningWidget">
+        <div class="o_planning_widget">
+
+            <!-- Barre d'outils -->
+            <div class="o_planning_toolbar">
+                <div class="o_planning_toolbar_left">
+                    <!-- Filtre groupe -->
+                    <div class="o_planning_filter">
+                        <label>Groupe :</label>
+                        <select class="o_planning_groupe_select">
+                            <option value="">Tous les groupes</option>
+                        </select>
+                    </div>
+                    <!-- Filtre période -->
+                    <div class="o_planning_filter">
+                        <label>Période :</label>
+                        <input type="date" class="o_planning_date_filter"/>
+                    </div>
+                </div>
+                <div class="o_planning_toolbar_right">
+                    <!-- Switch disposition -->
+                    <div class="o_planning_layout_switch">
+                        <button class="btn btn-sm o_planning_btn_layout active" data-layout="jours_colonnes">
+                            Jours / Colonnes
+                        </button>
+                        <button class="btn btn-sm o_planning_btn_layout" data-layout="jours_lignes">
+                            Jours / Lignes
+                        </button>
+                    </div>
+                    <!-- Bouton ajouter -->
+                    <button class="btn btn-sm btn-primary o_planning_btn_add">
+                        <i class="fa fa-plus"/> Ajouter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grille planning -->
+            <div class="o_planning_grid_container">
+                <table class="o_planning_grid">
+                    <thead class="o_planning_thead"/>
+                    <tbody class="o_planning_tbody"/>
+                </table>
+            </div>
+
+            <!-- Loader -->
+            <div class="o_planning_loader" style="display:none;">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+        </div>
+    </t>
+
+    <!-- Template d'une cellule cours -->
+    <t t-name="de_inscae.PlanningCours">
+        <div class="o_planning_cours"
+             t-att-data-id="cours.id"
+             t-att-data-groupe="cours.groupe_id[0]"
+             t-att-class="'o_planning_cours ' + (cours.type_groupe === 'fi' ? 'o_planning_cours_fi' : 'o_planning_cours_fc')"
+             draggable="true">
+            <div class="o_planning_cours_matiere">
+                <t t-esc="cours.matiere_id[1]"/>
+            </div>
+            <div class="o_planning_cours_groupe">
+                <i class="fa fa-users"/> <t t-esc="cours.groupe_id[1]"/>
+            </div>
+            <div class="o_planning_cours_prof">
+                <i class="fa fa-user"/> <t t-esc="cours.prof_id[1]"/>
+            </div>
+            <div class="o_planning_cours_salle">
+                <i class="fa fa-map-marker"/> <t t-esc="cours.salle_id[1]"/>
+            </div>
+            <div class="o_planning_cours_dates">
+                <i class="fa fa-calendar"/> 
+                <t t-esc="cours.date_debut"/> → <t t-esc="cours.date_fin"/>
+            </div>
+        </div>
+    </t>
+</templates>

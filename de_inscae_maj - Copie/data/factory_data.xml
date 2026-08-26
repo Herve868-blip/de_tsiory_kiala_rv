@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- 1. PARCOURS ACADEMIQUE (de_inscae.parcours_academique) -->
+        <record id="parcours_licence" model="de_inscae.parcours_academique">
+            <field name="code">L</field>
+            <field name="intitule">Licence</field>
+        </record>
+
+        <record id="parcours_master_adm" model="de_inscae.parcours_academique">
+            <field name="code">MA</field>
+            <field name="intitule">Master Administration d'Entreprises</field>
+        </record>
+
+        <record id="parcours_master_fin" model="de_inscae.parcours_academique">
+            <field name="code">MF</field>
+            <field name="intitule">Master Finance</field>
+        </record>
+
+        <!-- 2. FORMATIONS (de_inscae.formation) -->
+        <record id="formation_fi" model="de_inscae.formation">
+            <field name="sigle">FI</field>
+            <field name="intitule">Formation Initiale</field>
+            <field name="parcours_academique_id" ref="parcours_licence"/>
+        </record>
+
+        <record id="formation_fc" model="de_inscae.formation">
+            <field name="sigle">FC</field>
+            <field name="intitule">Formation Continue</field>
+            <field name="parcours_academique_id" ref="parcours_licence"/>
+        </record>
+
+        <record id="formation_ma" model="de_inscae.formation">
+            <field name="sigle">MA</field>
+            <field name="intitule">Master Administration d'Entreprises</field>
+            <field name="parcours_academique_id" ref="parcours_master_adm"/>
+        </record>
+
+        <record id="formation_mf" model="de_inscae.formation">
+            <field name="sigle">MF</field>
+            <field name="intitule">Master Finance</field>
+            <field name="parcours_academique_id" ref="parcours_master_fin"/>
+        </record>
+
+        <!-- 3. NIVEAUX (de_inscae.niveau) -->
+        <record id="niveau_l1" model="de_inscae.niveau">
+            <field name="code">L1</field>
+            <field name="intitule">Première Année</field>
+            <field name="formation_id" ref="formation_fi"/>
+        </record>
+
+        <record id="niveau_l2" model="de_inscae.niveau">
+            <field name="code">L2</field>
+            <field name="intitule">Deuxième Année</field>
+            <field name="formation_id" ref="formation_fi"/>
+        </record>
+
+        <record id="niveau_l3" model="de_inscae.niveau">
+            <field name="code">L3</field>
+            <field name="intitule">Troisième Année</field>
+            <field name="formation_id" ref="formation_fi"/>
+        </record>
+
+        <!-- 4. OPTIONS (de_inscae.option) -->
+        <record id="option_adm" model="de_inscae.option">
+            <field name="code">ADM</field>
+            <field name="intitule">Administration d'Entreprises</field>
+            <field name="niveau_id" ref="niveau_l3"/>
+        </record>
+
+        <record id="option_compta" model="de_inscae.option">
+            <field name="code">COMPTA</field>
+            <field name="intitule">Finance et Comptabilité</field>
+            <field name="niveau_id" ref="niveau_l3"/>
+        </record>
+
+        <!-- 5. COEFFICIENTS (de_inscae.coefficient) -->
+        <record id="coef_1" model="de_inscae.coefficient">
+            <field name="coefficient">1.0</field>
+        </record>
+
+        <record id="coef_2" model="de_inscae.coefficient">
+            <field name="coefficient">2.0</field>
+        </record>
+
+        <record id="coef_05" model="de_inscae.coefficient">
+            <field name="coefficient">0.5</field>
+        </record>
+
+        <!-- 6. SESSIONS NIVEAUX (de_inscae.session_niveau) -->
+        <record id="session_niveau_s1" model="de_inscae.session_niveau">
+            <field name="code">S1</field>
+            <field name="intitule">Session 1</field>
+            <field name="niveau_id" ref="niveau_l1"/>
+        </record>
+
+        <record id="session_niveau_s2" model="de_inscae.session_niveau">
+            <field name="code">S2</field>
+            <field name="intitule">Session 2</field>
+            <field name="niveau_id" ref="niveau_l1"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s1"/>
+        </record>
+
+        <record id="session_niveau_s3" model="de_inscae.session_niveau">
+            <field name="code">S3</field>
+            <field name="intitule">Session 3</field>
+            <field name="niveau_id" ref="niveau_l2"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s2"/>
+        </record>
+
+        <record id="session_niveau_s4" model="de_inscae.session_niveau">
+            <field name="code">S4</field>
+            <field name="intitule">Session 4</field>
+            <field name="niveau_id" ref="niveau_l2"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s3"/>
+        </record>
+
+        <record id="session_niveau_s5_adm" model="de_inscae.session_niveau">
+            <field name="code">S5-ADM</field>
+            <field name="intitule">Session 5 - Administration d'Entreprises</field>
+            <field name="niveau_id" ref="niveau_l3"/>
+            <field name="option_id" ref="option_adm"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s4"/>
+        </record>
+
+        <record id="session_niveau_s5_compta" model="de_inscae.session_niveau">
+            <field name="code">S5-COMPTA</field>
+            <field name="intitule">Session 5 - Finance et Comptabilité</field>
+            <field name="niveau_id" ref="niveau_l3"/>
+            <field name="option_id" ref="option_compta"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s4"/>
+        </record>
+
+        <record id="session_niveau_s6_adm" model="de_inscae.session_niveau">
+            <field name="code">S6-ADM</field>
+            <field name="intitule">Session 6 - Administration d'Entreprises</field>
+            <field name="niveau_id" ref="niveau_l3"/>
+            <field name="option_id" ref="option_adm"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s5_adm"/>
+        </record>
+
+        <record id="session_niveau_s6_compta" model="de_inscae.session_niveau">
+            <field name="code">S6-COMPTA</field>
+            <field name="intitule">Session 6 - Finance et Comptabilité</field>
+            <field name="niveau_id" ref="niveau_l3"/>
+            <field name="option_id" ref="option_compta"/>
+            <field name="session_niveau_precedente_id" ref="session_niveau_s5_compta"/>
+        </record>
+
+        <!-- 7. SESSIONS PARENTES FI & HERITAGE SESSION PARENTE -->
+        <!-- Note: La table SQL session_parente_fi référence session_parente. 
+             En Odoo, si c'est un héritage _inherits (ou si session_parente contient la base), 
+             les champs mois_debut/fin et formation_id sont portés sur la session parent. -->
+
+        <record id="session_parente_s1_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S1-FI</field>
+            <field name="libelle">Session 1</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s1"/>
+            <field name="mois_debut">1</field> <!-- Janvier -->
+            <field name="mois_fin">5</field>   <!-- Mai -->
+        </record>
+
+        <record id="session_parente_s2_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S2-FI</field>
+            <field name="libelle">Session 2</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s2"/>
+            <field name="mois_debut">8</field> <!-- Août -->
+            <field name="mois_fin">12</field>  <!-- Décembre -->
+        </record>
+
+        <record id="session_parente_s3_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S3-FI</field>
+            <field name="libelle">Session 3</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s3"/>
+            <field name="mois_debut">1</field>
+            <field name="mois_fin">5</field>
+        </record>
+
+        <record id="session_parente_s4_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S4-FI</field>
+            <field name="libelle">Session 4</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s4"/>
+            <field name="mois_debut">8</field>
+            <field name="mois_fin">12</field>
+        </record>
+
+        <record id="session_parente_s5_adm_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S5-ADM-FI</field>
+            <field name="libelle">Session 5 Administration d'Entreprises</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s5_adm"/>
+            <field name="mois_debut">1</field>
+            <field name="mois_fin">3</field>   <!-- Mars -->
+        </record>
+
+        <record id="session_parente_s5_compta_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S5-COMPTA-FI</field>
+            <field name="libelle">Session 5 Finance et Comptabilité</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s5_compta"/>
+            <field name="mois_debut">1</field>
+            <field name="mois_fin">3</field>
+        </record>
+
+        <record id="session_parente_s6_adm_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S6-ADM-FI</field>
+            <field name="libelle">Session 6 Administration d'Entreprises</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s6_adm"/>
+            <field name="mois_debut">4</field> <!-- Avril -->
+            <field name="mois_fin">6</field>   <!-- Juin -->
+        </record>
+
+        <record id="session_parente_s6_compta_fi" model="de_inscae.session_parente_fi">
+            <field name="code">S6-COMPTA-FI</field>
+            <field name="libelle">Session 6 Finance et Comptabilité</field>
+            <field name="formation_id" ref="formation_fi"/>
+            <field name="session_niveau_id" ref="session_niveau_s6_compta"/>
+            <field name="mois_debut">4</field>
+            <field name="mois_fin">6</field>
+        </record>
+
+        <!-- 8. SESSIONS PARENTES FC -->
+        <record id="session_parente_fc_janv" model="de_inscae.session_parente_fc">
+            <field name="code">FC-JANV</field>
+            <field name="libelle">Session Janvier</field>
+            <field name="formation_id" ref="formation_fc"/>
+            <field name="mois_debut">1</field>
+            <field name="mois_fin">5</field>
+        </record>
+
+        <record id="session_parente_fc_hiver" model="de_inscae.session_parente_fc">
+            <field name="code">FC-HIVER</field>
+            <field name="libelle">Session Hiver</field>
+            <field name="formation_id" ref="formation_fc"/>
+            <field name="mois_debut">6</field> <!-- Juin -->
+            <field name="mois_fin">7</field>   <!-- Juillet -->
+        </record>
+
+        <record id="session_parente_fc_aout" model="de_inscae.session_parente_fc">
+            <field name="code">FC-AOUT</field>
+            <field name="libelle">Session Août</field>
+            <field name="formation_id" ref="formation_fc"/>
+            <field name="mois_debut">8</field>
+            <field name="mois_fin">12</field>
+        </record>
+
+        <record id="session_parente_fc_int" model="de_inscae.session_parente_fc">
+            <field name="code">FC-INT</field>
+            <field name="libelle">Session Intensive</field>
+            <field name="formation_id" ref="formation_fc"/>
+            <field name="mois_debut">4</field>
+            <field name="mois_fin">7</field>
+        </record>
+
+    </data>
+</odoo>

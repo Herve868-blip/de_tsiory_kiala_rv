@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tranche_horaire_tree" model="ir.ui.view">
+        <field name="name">de_inscae.tranche_horaire.tree</field>
+        <field name="model">de_inscae.tranche_horaire</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="heure_debut" widget="float_time"/>
+                <field name="heure_fin" widget="float_time"/>
+                <field name="duree" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tranche_horaire_form" model="ir.ui.view">
+        <field name="name">de_inscae.tranche_horaire.form</field>
+        <field name="model">de_inscae.tranche_horaire</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="heure_debut" widget="float_time"/>
+                        <field name="heure_fin" widget="float_time"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tranche_horaire" model="ir.actions.act_window">
+        <field name="name">Tranches Horaires</field>
+        <field name="res_model">de_inscae.tranche_horaire</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

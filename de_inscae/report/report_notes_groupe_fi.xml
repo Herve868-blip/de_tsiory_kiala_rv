@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Format papier paysage pour avoir la place pour les colonnes -->
+    <record id="paperformat_notes_groupe_fi" model="report.paperformat">
+        <field name="name">Notes Groupe FI</field>
+        <field name="orientation">Landscape</field>
+        <field name="format">A4</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+    </record>
+
+    <!-- Déclaration du rapport -->
+    <report
+        id="report_notes_groupe_fi"
+        model="de_inscae.groupe_fi"
+        string="Notes du Groupe"
+        name="de_inscae.report_notes_groupe_fi_template"
+        file="de_inscae.report_notes_groupe_fi_template"
+        report_type="qweb-pdf"
+        paperformat="de_inscae.paperformat_notes_groupe_fi"
+    />
+
+    <!-- Template -->
+    <template id="report_notes_groupe_fi_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- En-tête -->
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <h3>Notes du Groupe : <t t-esc="doc.nom"/></h3>
+                                <h5>
+                                    Session :
+                                    <t t-esc="doc.session_calendrier_fi_id.session_calendrier_id.libelle"/>
+                                </h5>
+                            </div>
+                        </div>
+
+                        <!-- Tableau des notes -->
+                        <t t-set="matieres" t-value="doc.matiere_prof_ids.filtered(lambda m: m.notes_verrouillees)"/>
+                        <t t-set="membres" t-value="doc.membre_ids.sorted(lambda m: m.etudiant_fi_id.etudiant_id.individu_id.nom_complet)"/>
+
+                        <table class="table table-bordered table-sm" style="font-size: 9px;">
+                            <thead>
+                                <!-- Ligne 1 : matières -->
+                                <tr style="background-color: #875A7B; color: white;">
+                                    <th rowspan="2" style="vertical-align: middle; min-width: 120px;">Étudiant</th>
+                                    <th rowspan="2" style="vertical-align: middle;">Matricule</th>
+                                    <t t-foreach="matieres" t-as="mp">
+                                        <th style="text-align: center;">
+                                            <t t-esc="mp.matiere_id.intitule"/>
+                                            <br/>
+                                            <small>Coeff. <t t-esc="mp.session_calendrier_fi_matiere_id.coefficient_id.coefficient"/></small>
+                                        </th>
+                                    </t>
+                                    <th rowspan="2" style="vertical-align: middle; text-align: center;">Moyenne Générale</th>
+                                    <th rowspan="2" style="vertical-align: middle; text-align: center;">Résultat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="membres" t-as="inscription">
+                                    <t t-set="etudiant" t-value="inscription.etudiant_fi_id.etudiant_id"/>
+                                    <tr>
+                                        <!-- Nom étudiant -->
+                                        <td><t t-esc="etudiant.individu_id.nom_complet"/></td>
+                                        <td style="text-align: center;"><t t-esc="etudiant.matricule"/></td>
+
+                                        <!-- Notes par matière -->
+                                        <t t-foreach="matieres" t-as="mp">
+                                            <t t-set="note" t-value="inscription.note_ids.filtered(lambda n: n.matiere_prof_groupe_fi_id.id == mp.id)"/>
+                                            <td style="text-align: center;">
+                                                <t t-if="note">
+                                                    <t t-set="n" t-value="note[0]"/>
+                                                    <span t-attf-style="
+                                                        color: #{'green' if n.resultat in ('admis', 'admis_ap_deliberation') else 'orange' if n.resultat == 'deliberation' else 'red' if n.resultat == 'refuse' else 'black'};
+                                                        font-weight: bold;
+                                                    ">
+                                                        <t t-esc="'%.2f' % n.moyenne"/>
+                                                    </span>
+                                                </t>
+                                                <t t-else="">—</t>
+                                            </td>
+                                        </t>
+
+                                        <!-- Moyenne générale -->
+                                        <td style="text-align: center; font-weight: bold;">
+                                            <t t-esc="'%.2f' % inscription.moyenne_generale"/>
+                                        </td>
+
+                                        <!-- Résultat session -->
+                                        <td style="text-align: center;">
+                                            <t t-set="res" t-value="inscription.resultat_session"/>
+                                            <span t-attf-style="
+                                                font-weight: bold;
+                                                color: #{'green' if res in ('admis', 'transfere_fc') else 'orange' if res == 'deliberation' else 'red'};
+                                            ">
+                                                <t t-if="res == 'admis'">Admis</t>
+                                                <t t-elif="res == 'deliberation'">Délibération</t>
+                                                <t t-elif="res == 'transfere_fc'">Transféré FC</t>
+                                                <t t-elif="res == 'exclu'">Exclu</t>
+                                                <t t-else="">—</t>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Légende -->
+                        <div class="row mt-3" style="font-size: 9px;">
+                            <div class="col-12">
+                                <span style="color: green; font-weight: bold;">■</span> Admis &#160;
+                                <span style="color: orange; font-weight: bold;">■</span> Délibération &#160;
+                                <span style="color: red; font-weight: bold;">■</span> Refusé
+                            </div>
+                        </div>
+
+                        <!-- Statistiques -->
+                        <div class="row mt-3" style="font-size: 9px;">
+                            <div class="col-12">
+                                <strong>Total étudiants :</strong> <t t-esc="len(membres)"/> &#160;|&#160;
+                                <strong>Admis :</strong> <t t-esc="len(membres.filtered(lambda m: m.resultat_session == 'admis'))"/> &#160;|&#160;
+                                <strong>Délibération :</strong> <t t-esc="len(membres.filtered(lambda m: m.resultat_session == 'deliberation'))"/> &#160;|&#160;
+                                <strong>Exclus :</strong> <t t-esc="len(membres.filtered(lambda m: m.resultat_session == 'exclu'))"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

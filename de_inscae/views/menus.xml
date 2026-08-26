@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu racine -->
+    <menuitem id="menu_root" name="Direction des Études - INSCAE"/>
+    <!-- Sous-menu Individus -->
+    <menuitem id="menu_personnes" name="Personnes" parent="menu_root"/>
+        <menuitem id="menu_individu" name="Individus" parent="menu_personnes" action="action_individu"/>
+
+    <!-- Sous-menu Sessions -->
+    <menuitem id="menu_sessions" name="Sessions" parent="menu_root"/>
+        <menuitem id="menu_session_calendrier_fi" name="Sessions FI" parent="menu_sessions" action="action_session_calendrier_fi"/>
+        <menuitem id="menu_session_calendrier_fc" name="Sessions FC" parent="menu_sessions" action="action_session_calendrier_fc"/>
+        
+    <!-- Sous-menu Étudiants -->
+    <menuitem id="menu_etudiants" name="Étudiants" parent="menu_root"/>
+        <menuitem id="menu_etudiant_fi" name="Étudiants FI" action="action_etudiant_fi" parent="menu_etudiants"/>
+        <menuitem id="menu_etudiant_fc" name="Étudiants FC" action="action_etudiant_fc" parent="menu_etudiants"/>
+
+    <menuitem id="menu_groupe" name="Groupes" parent="menu_root"/>
+        <menuitem id="menu_groupe_fi" name="Groupes FI" parent="menu_groupe" action="action_groupe_fi"/>
+        <menuitem id="menu_groupe_fc" name="Groupes FC" parent="menu_groupe" action="action_groupe_fc"/>
+
+    <!-- Sous-menu Concours -->
+    <menuitem id="menu_concours" name="Concours" parent="menu_root" action="action_concours"/>
+
+        <!-- Sous-menu Paramètres -->
+    <menuitem id="menu_parametres" name="Paramètres" parent="menu_root"/>
+        <menuitem id="menu_parcours_academique" name="Parcours Académiques" parent="menu_parametres" action="action_parcours_academique"/>
+        <menuitem id="menu_formation" name="Formations" parent="menu_parametres" action="action_formation"/>
+        <menuitem id="menu_niveau" name="Niveaux" parent="menu_parametres" action="action_niveau"/>
+        <menuitem id="menu_option" name="Options" parent="menu_parametres" action="action_option"/>
+        <menuitem id="menu_session_niveau" name="Sessions Niveaux" parent="menu_parametres" action="action_session_niveau"/>
+        <menuitem id="menu_session_parente_fi" name="Sessions Parentes FI" parent="menu_parametres" action="action_session_parente_fi"/>
+        <menuitem id="menu_session_parente_fc" name="Sessions Parentes FC" parent="menu_parametres" action="action_session_parente_fc"/>
+        <menuitem id="menu_coefficient" name="Coefficients" parent="menu_parametres" action="action_coefficient"/>
+        <menuitem id="menu_matiere" name="Matières" parent="menu_parametres" action="action_matiere"/>
+        <menuitem id="menu_enseignant" name="Enseignants" parent="menu_parametres" action="action_prof"/>
+        <menuitem id="menu_tranche_horaire" name="Tranches Horaires" parent="menu_parametres" action="action_tranche_horaire"/>
+        <menuitem id="menu_salle" name="Salles" parent="menu_parametres" action="action_salle"/>
+        <menuitem id="menu_regle_admission" name="Règles d'Admission" parent="menu_parametres" action="action_regle_admission"/>
+
+    <menuitem id="menu_planning" name="Planning" parent="menu_root" action="action_planning_widget"/>
+
+</odoo>

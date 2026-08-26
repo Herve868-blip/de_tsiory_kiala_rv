@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_salle_tree" model="ir.ui.view">
+        <field name="name">de_inscae.salle.tree</field>
+        <field name="model">de_inscae.salle</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="numero"/>
+                <field name="capacite"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_salle_form" model="ir.ui.view">
+        <field name="name">de_inscae.salle.form</field>
+        <field name="model">de_inscae.salle</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="numero"/>
+                        <field name="capacite"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_salle" model="ir.actions.act_window">
+        <field name="name">Salles</field>
+        <field name="res_model">de_inscae.salle</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

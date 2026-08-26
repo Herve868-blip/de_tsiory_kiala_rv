@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Liste FI -->
+    <record id="view_session_calendrier_fi_tree" model="ir.ui.view">
+        <field name="name">de_inscae.session_calendrier_fi.tree</field>
+        <field name="model">de_inscae.session_calendrier_fi</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="libelle"/>
+                <field name="session_parente_fi_id"/>
+                <field name="annee"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire FI -->
+    <record id="view_session_calendrier_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.session_calendrier_fi.form</field>
+        <field name="model">de_inscae.session_calendrier_fi</field>
+        <field name="arch" type="xml">
+            <form>
+                <header attrs="{'invisible': [('id', '=', False)]}">
+                    <button name="action_creer_session_suivante" type="object" string="Créer la Session Suivante" class="btn-primary"/>
+                    <button name="action_ouvrir_inscriptions"
+                            type="object"
+                            string="Ouvrir les Inscriptions"
+                            attrs="{'invisible': [('state', '!=', 'planification')]}"
+                            class="btn-primary"/>
+                    <button name="action_demarrer"
+                            type="object"
+                            string="Démarrer la Session"
+                            attrs="{'invisible': [('state', '!=', 'inscriptions')]}"
+                            class="btn-primary"/>
+                    <button name="action_deliberer"
+                            type="object"
+                            string="Passer en Délibération"
+                            attrs="{'invisible': [('state', '!=', 'en_cours')]}"
+                            class="btn-primary"/>
+                    <button name="action_cloturer"
+                            type="object"
+                            string="Clôturer"
+                            attrs="{'invisible': [('state', '!=', 'deliberation')]}"
+                            class="btn-primary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="planification,inscriptions,en_cours,deliberation,cloturee"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Session">
+                            <field name="session_parente_fi_id" options="{'no_create_edit':True}"/>
+                            <field name="annee"/>
+                            <field name="session_niveau_precedente_id" invisible="1"/>
+                            <field name="session_calendrier_fi_prec_id" domain="[('session_parente_fi_id.session_niveau_id', '=', session_niveau_precedente_id)]" options="{'no_create_edit':True}"/>
+                            <field name="session_parente_id" readonly="1" invisible="1"/>
+                        </group>
+                        <group string="Informations Générales">
+                            <field name="code"/>
+                            <field name="libelle"/>
+                        </group>
+                    </group>
+                    <group string="Règle d'Admission">
+                        <field name="regle_admission_id"/>
+                    </group>
+                    <group string="Période">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                    </group>
+                    <notebook>
+                        <page string="Matières">
+                            <field name="matiere_ids">
+                                <tree editable="bottom">
+                                    <field name="matiere_id"/>
+                                    <field name="coefficient_id"/>
+                                    <field name="est_selectionnee"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Groupes">
+                            <field name="groupe_ids">
+                                <tree editable="bottom">
+                                    <field name="code"/>
+                                    <field name="nom"/>
+                                    <field name="capacite"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Étudiants Inscrits">
+                            <button name="action_ouvrir_wizard_concours"
+                                    type="object"
+                                    string="Inscrire depuis le(s) concours"
+                                    icon="fa-trophy"
+                                    class="btn-primary" style="margin-right: 10px;"/>
+                            <button name="action_ouvrir_wizard_precedente"
+                                    type="object"
+                                    string="Inscrire depuis la session précédente"
+                                    icon="fa-graduation-cap"
+                                    class="btn-primary"
+                                    attrs="{'invisible': [('session_calendrier_fi_prec_id', '=', False)]}"/>
+                            <field name="etudiant_ids">
+                                <tree create="0">
+                                    <field name="etudiant_fi_id"/>
+                                    <field name="groupe_fi_id"/>
+                                    <field name="resultat_session"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action FI -->
+    <record id="action_session_calendrier_fi" model="ir.actions.act_window">
+        <field name="name">Calendriers FI</field>
+        <field name="res_model">de_inscae.session_calendrier_fi</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vue Liste FC -->
+    <record id="view_session_calendrier_fc_tree" model="ir.ui.view">
+        <field name="name">de_inscae.session_calendrier_fc.tree</field>
+        <field name="model">de_inscae.session_calendrier_fc</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="libelle"/>
+                <field name="session_parente_fc_id"/>
+                <field name="annee"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire FC -->
+    <record id="view_session_calendrier_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.session_calendrier_fc.form</field>
+        <field name="model">de_inscae.session_calendrier_fc</field>
+        <field name="arch" type="xml">
+            <form>
+                <header attrs="{'invisible': [('id', '=', False)]}">
+                    <button name="action_ouvrir_inscriptions"
+                            type="object"
+                            string="Ouvrir les Inscriptions"
+                            attrs="{'invisible': [('state', '!=', 'planification')]}"
+                            class="btn-primary"/>
+                    <button name="action_demarrer"
+                            type="object"
+                            string="Démarrer la Session"
+                            attrs="{'invisible': [('state', '!=', 'inscriptions')]}"
+                            class="btn-primary"/>
+                    <button name="action_deliberer"
+                            type="object"
+                            string="Passer en Délibération"
+                            attrs="{'invisible': [('state', '!=', 'en_cours')]}"
+                            class="btn-primary"/>
+                    <button name="action_cloturer"
+                            type="object"
+                            string="Clôturer"
+                            attrs="{'invisible': [('state', '!=', 'deliberation')]}"
+                            class="btn-primary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="planification,inscriptions,en_cours,deliberation,cloturee"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Session">
+                            <field name="session_parente_fc_id"/>
+                            <field name="session_parente_id" readonly="1" invisible="1"/>
+                            <field name="annee"/>
+                        </group>
+                        <group string="Informations Générales">
+                            <field name="code"/>
+                            <field name="libelle"/>
+                        </group>
+                    </group>
+                    <group string="Règle d'Admission">
+                        <field name="regle_admission_id"/>
+                    </group>
+                    <group string="Période">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                    </group>
+                    <group string="Sessions Précédentes">
+                        <field name="session_calendrier_fc_prec_id"/>
+                        <field name="session_calendrier_fi_prec_ids" widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Matières Disponibles">
+                            <field name="matiere_dispo_ids">
+                                <tree editable="bottom">
+                                    <field name="matiere_id"/>
+                                    <field name="coefficient_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Groupes">
+                            <field name="groupe_fc_ids" context="{'default_session_calendrier_fc_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="session_calendrier_fc_id" invisible="1"/>
+                                    <field name="code"/>
+                                    <field name="nom"/>
+                                    <field name="matiere_dispo_session_fc_id"
+                                           domain="[('session_calendrier_fc_id', '=', session_calendrier_fc_id)]"/>
+                                    <field name="prof_id"/>
+                                    <field name="capacite"/>
+                                    <field name="effectif"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Étudiants">
+                            <button name="action_ouvrir_wizard_concours_fc"
+                                    type="object"
+                                    string="Inscrire depuis le concours"
+                                    icon="fa-trophy"
+                                    class="btn-primary mr-2 mb-2"/>
+                            <button name="action_ouvrir_wizard_precedente_fc"
+                                    type="object"
+                                    string="Inscrire depuis la session FC précédente"
+                                    icon="fa-graduation-cap"
+                                    class="btn-primary mr-2 mb-2"
+                                    attrs="{'invisible': [('session_calendrier_fc_prec_id', '=', False)]}"/>
+                            <button name="action_ouvrir_wizard_transfere_fi"
+                                    type="object"
+                                    string="Inscrire transférés FI"
+                                    icon="fa-exchange"
+                                    class="btn-primary mr-2 mb-2"
+                                    attrs="{'invisible': [('session_calendrier_fi_prec_ids', '=', [])]}"/>
+                            <field name="etudiant_session_fc_ids" options="{'no_open': True}">
+                                <tree create="0">
+                                    <field name="etudiant_fc_id"/>
+                                    <field name="resultat_session"/>
+                                    <button name="action_ouvrir_fiche"
+                                                    string="Ouvrir"
+                                                    type="object"
+                                                    icon="fa-external-link"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action FC -->
+    <record id="action_session_calendrier_fc" model="ir.actions.act_window">
+        <field name="name">Calendriers FC</field>
+        <field name="res_model">de_inscae.session_calendrier_fc</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

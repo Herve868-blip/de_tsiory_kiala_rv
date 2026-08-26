@@ -1,0 +1,27 @@
+# Fichiers temporaires Office
+~$*.xlsx
+~$*.xls
+~$*.docx
+~$*.doc
+~$*.pptx
+~$*.ppt
+
+# Gros fichiers binaires (trop gros pour GitHub, <100MB limit)
+*.xls
+*.xlsx
+*.pdf
+*.docx
+*.doc
+*.pptx
+*.ppt
+*.pyc
+__pycache__/
+
+# Dossiers de données (notes, examens, relevés)
+recup_base/
+S°*/
+
+# Fichiers système
+Thumbs.db
+Desktop.ini
+.DS_Store

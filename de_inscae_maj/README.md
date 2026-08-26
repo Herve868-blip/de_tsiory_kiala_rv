@@ -1,0 +1,1 @@
+# Module Odoo pour la Direction des Études - INSCAE Madagascar

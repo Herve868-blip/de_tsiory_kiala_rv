@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_inscription_concours_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_inscription_concours_fi.form</field>
+        <field name="model">de_inscae.wizard_inscription_concours_fi</field>
+        <field name="arch" type="xml">
+            <form string="Inscrire depuis le concours">
+                <sheet>
+                    <group>
+                        <field name="session_calendrier_fi_id" readonly="1"/>
+                    </group>
+                    <field name="candidat_ids" options="{'no_create': True, 'no_quick_create': True}">
+                        <tree>
+                            <field name="individu_id"/>
+                            <field name="resultat"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer"
+                            type="object"
+                            string="Confirmer"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wizard_inscription_precedente_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_inscription_precedente_fi.form</field>
+        <field name="model">de_inscae.wizard_inscription_precedente_fi</field>
+        <field name="arch" type="xml">
+            <form string="Inscrire depuis la session précédente">
+                <sheet>
+                    <group>
+                        <field name="session_calendrier_fi_id" readonly="1"/>
+                    </group>
+                    <field name="etudiant_session_ids" options="{'no_create': True, 'no_quick_create': True}">
+                        <tree>
+                            <field name="etudiant_fi_id"/>
+                            <field name="resultat_session"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer"
+                            type="object"
+                            string="Confirmer"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

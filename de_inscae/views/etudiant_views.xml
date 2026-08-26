@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_etudiant_fi_tree" model="ir.ui.view">
+        <field name="name">de_inscae.etudiant_fi.tree</field>
+        <field name="model">de_inscae.etudiant_fi</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="matricule"/>
+                <field name="individu_id"/>
+                <field name="formation_id"/>
+                <field name="session_niveau_actuelle"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_etudiant_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.etudiant_fi.form</field>
+        <field name="model">de_inscae.etudiant_fi</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="matricule" readonly="1"/>
+                        <field name="individu_id"/>
+                        <field name="formation_id"/>
+                        <field name="session_niveau_actuelle"/>
+                    </group>
+                    <notebook>
+                        <page string="Inscriptions aux Sessions">
+                            <field name="session_fi_ids">
+                                <tree editable="bottom">
+                                    <field name="session_calendrier_fi_id"/>
+                                    <field name="groupe_fi_id"/>
+                                    <field name="moyenne_generale"/>
+                                    <field name="resultat_session"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_etudiant_fi" model="ir.actions.act_window">
+        <field name="name">Étudiants FI</field>
+        <field name="res_model">de_inscae.etudiant_fi</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="view_etudiant_fc_tree" model="ir.ui.view">
+        <field name="name">de_inscae.etudiant_fc.tree</field>
+        <field name="model">de_inscae.etudiant_fc</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="matricule"/>
+                <field name="individu_id"/>
+                <field name="formation_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_etudiant_session_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.etudiant_session_fi.form</field>
+        <field name="model">de_inscae.etudiant_session_fi</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_jury_admettre"
+                            string="Admettre"
+                            type="object"
+                            class="btn-success"
+                            attrs="{'invisible': [('peut_jury_decider', '=', False)]}"
+                            confirm="Admettre cet étudiant après délibération du jury ?"/>
+                    <button name="action_jury_transferer_fc"
+                            string="Transférer en FC"
+                            type="object"
+                            class="btn-warning"
+                            attrs="{'invisible': [('peut_jury_decider', '=', False)]}"
+                            confirm="Transférer cet étudiant en FC ?"/>
+                    <field name="peut_jury_decider" invisible="1"/>
+                    <field name="resultat_session" widget="statusbar"
+                           statusbar_visible="en_attente_deliberation,admis,admis_ap_deliberation,transfere_fc,exclu"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Inscription">
+                            <field name="etudiant_fi_id" readonly="1"/>
+                            <field name="session_calendrier_fi_id" readonly="1"/>
+                            <field name="groupe_fi_id" readonly="1"/>
+                        </group>
+                        <group string="Résultats">
+                            <field name="moyenne_generale" readonly="1"/>
+                            <field name="resultat_session" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note_ids">
+                                <tree decoration-success="resultat in ('admis', 'admis_ap_deliberation')"
+                                      decoration-warning="resultat == 'deliberation'"
+                                      decoration-danger="resultat == 'refuse'"
+                                      decoration-muted="not resultat">
+                                    <field name="matiere_id" string="Matière"/>
+                                    <field name="prof_id" string="Professeur"/>
+                                    <field name="note_quizz" string="Quizz" readonly="1"/>
+                                    <field name="note_intra" string="Intra" readonly="1"/>
+                                    <field name="note_examen_final" string="Exam Final" readonly="1"/>
+                                    <field name="moyenne" string="Moyenne" readonly="1"/>
+                                    <field name="resultat" string="Résultat" readonly="1"/>
+                                    <button name="action_admettre_apres_deliberation"
+                                            string="Admettre"
+                                            type="object"
+                                            icon="fa-check"
+                                            attrs="{'invisible': [('resultat', '!=', 'deliberation')]}"
+                                            confirm="Admettre cette matière après délibération ?"/>
+                                    <button name="action_refuser_apres_deliberation"
+                                            string="Refuser"
+                                            type="object"
+                                            icon="fa-times"
+                                            attrs="{'invisible': [('resultat', '!=', 'deliberation')]}"
+                                            confirm="Refuser cette matière après délibération ?"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_etudiant_session_fi_form" model="ir.actions.act_window">
+        <field name="name">Fiche Étudiant Session</field>
+        <field name="res_model">de_inscae.etudiant_session_fi</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_etudiant_session_fi_form"/>
+    </record>
+
+    <record id="view_etudiant_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.etudiant_fc.form</field>
+        <field name="model">de_inscae.etudiant_fc</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Informations">
+                            <field name="matricule" readonly="1"/>
+                            <field name="individu_id"/>
+                            <field name="formation_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Inscriptions aux Sessions">
+                            <field name="session_fc_ids">
+                                <tree>
+                                    <field name="session_calendrier_fc_id" string="Session"/>
+                                    <field name="resultat_session"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_etudiant_fc" model="ir.actions.act_window">
+        <field name="name">Étudiants FC</field>
+        <field name="res_model">de_inscae.etudiant_fc</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_etudiant_session_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.etudiant_session_fc.form</field>
+        <field name="model">de_inscae.etudiant_session_fc</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="resultat_session" widget="statusbar"
+                           statusbar_visible="en_attente_deliberation,admis,admis_ap_deliberation,exclu"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Inscription">
+                            <field name="etudiant_fc_id" readonly="1"/>
+                            <field name="session_calendrier_fc_id" readonly="1"/>
+                        </group>
+                        <group string="Résultats">
+                            <field name="resultat_session" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Matières suivies">
+                            <field name="groupe_fc_ids">
+                                <tree decoration-success="resultat in ('admis', 'admis_ap_deliberation')"
+                                      decoration-warning="resultat == 'deliberation'"
+                                      decoration-danger="resultat == 'refuse'"
+                                      decoration-muted="not resultat">
+                                    <field name="groupe_fc_id" string="Groupe"/>
+                                    <field name="matiere_id" string="Matière"/>
+                                    <field name="prof_id" string="Professeur"/>
+                                    <field name="note_quizz" readonly="1"/>
+                                    <field name="note_intra" readonly="1"/>
+                                    <field name="note_examen_final" readonly="1"/>
+                                    <field name="moyenne" readonly="1"/>
+                                    <field name="resultat" readonly="1"/>
+                                    <button name="action_admettre_apres_deliberation"
+                                            string="Admettre"
+                                            type="object"
+                                            icon="fa-check"
+                                            attrs="{'invisible': [('resultat', '!=', 'deliberation')]}"
+                                            confirm="Admettre cette matière après délibération ?"/>
+                                    <button name="action_refuser_apres_deliberation"
+                                            string="Refuser"
+                                            type="object"
+                                            icon="fa-times"
+                                            attrs="{'invisible': [('resultat', '!=', 'deliberation')]}"
+                                            confirm="Refuser cette matière après délibération ?"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes de la session">
+                            <field name="tentative_matiere_ids" readonly="1">
+                                <tree>
+                                    <field name="matiere_id"/>
+                                    <field name="prof_id"/>
+                                    <field name="note_finale"/>
+                                    <field name="est_reussie"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_etudiant_session_fc_form" model="ir.actions.act_window">
+        <field name="name">Fiche Étudiant Session</field>
+        <field name="res_model">de_inscae.etudiant_session_fc</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_etudiant_session_fc_form"/>
+    </record>
+</odoo>

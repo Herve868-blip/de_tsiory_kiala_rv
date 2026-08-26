@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_groupe_fi_tree" model="ir.ui.view">
+        <field name="name">de_inscae.groupe_fi.tree</field>
+        <field name="model">de_inscae.groupe_fi</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="nom"/>
+                <field name="session_calendrier_fi_id"/>
+                <field name="capacite"/>
+                <field name="effectif"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_groupe_fi_form" model="ir.ui.view">
+        <field name="name">de_inscae.groupe_fi.form</field>
+        <field name="model">de_inscae.groupe_fi</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_calculer_moyennes_generales"
+                            string="Calculer les Moyennes Générales"
+                            type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': [('notes_toutes_verrouillees', '=', False)]}"
+                            confirm="Calculer les moyennes générales pour tous les membres de ce groupe ?"/>
+                    <field name="notes_toutes_verrouillees" invisible="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Informations Générales">
+                            <field name="code"/>
+                            <field name="nom"/>
+                            <field name="session_calendrier_fi_id"/>
+                        </group>
+                        <group string="Capacité">
+                            <field name="capacite"/>
+                            <field name="effectif"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Matières et Profs">
+                            <field name="matiere_prof_ids">
+                                <tree editable="bottom" delete="0" create="0">
+                                    <field name="matiere_id"/>
+                                    <field name="prof_id" attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                                    <field name="ponderation_quizz" attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                                    <field name="ponderation_intra" attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                                    <field name="ponderation_examen_final" attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                                    <field name="notes_verrouillees" readonly="1"/>
+                                    <button name="action_ouvrir_notes"
+                                            type="object"
+                                            string="Notes"
+                                            icon="fa-list-alt"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Membres">
+                            <button name="action_ajouter_membres" type="object" string="Ajouter des membres" icon="fa-plus" class="btn-primary"/>
+                            <field name="membre_ids" readonly="1">
+                                <tree>
+                                    <field name="etudiant_fi_id"/>
+                                    <field name="moyenne_generale"/>
+                                    <field name="resultat_session"/>
+                                    <button name="action_retirer_du_groupe"
+                                            type="object"
+                                            string="Retirer du groupe"
+                                            icon="fa-times"
+                                            confirm="Voulez-vous retirer cet étudiant du groupe ?"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_groupe_fi" model="ir.actions.act_window">
+        <field name="name">Groupes FI</field>
+        <field name="res_model">de_inscae.groupe_fi</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_groupe_fc_tree" model="ir.ui.view">
+        <field name="name">de_inscae.groupe_fc.tree</field>
+        <field name="model">de_inscae.groupe_fc</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="nom"/>
+                <field name="session_calendrier_fc_id"/>
+                <field name="matiere_dispo_session_fc_id"/>
+                <field name="prof_id"/>
+                <field name="capacite"/>
+                <field name="effectif"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_groupe_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.groupe_fc.form</field>
+        <field name="model">de_inscae.groupe_fc</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_verrouiller_notes"
+                            string="Verrouiller les Notes"
+                            type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': [('notes_verrouillees', '=', True)]}"
+                            confirm="Verrouiller les notes de ce groupe ? Cette action est irréversible."/>
+                    <field name="notes_verrouillees" invisible="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Informations Générales">
+                            <field name="code"/>
+                            <field name="nom"/>
+                            <field name="session_calendrier_fc_id"/>
+                            <field name="matiere_dispo_session_fc_id"
+                                   domain="[('session_calendrier_fc_id', '=', session_calendrier_fc_id)]"/>
+                            <field name="prof_id"/>
+                        </group>
+                        <group string="Capacité">
+                            <field name="capacite"/>
+                            <field name="effectif"/>
+                        </group>
+                    </group>
+                    <group string="Pondérations">
+                        <field name="ponderation_quizz"
+                               attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                        <field name="ponderation_intra"
+                               attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                        <field name="ponderation_examen_final"
+                               attrs="{'readonly': [('notes_verrouillees', '=', True)]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Membres">
+                            <field name="membre_ids"
+                                   attrs="{'readonly': [('notes_verrouillees', '=', True)]}">
+                                <tree editable="bottom"
+                                      decoration-success="resultat in ('admis', 'admis_ap_deliberation')"
+                                      decoration-warning="resultat == 'deliberation'"
+                                      decoration-danger="resultat == 'refuse'"
+                                      decoration-info="prerequis_issue != False"
+                                      decoration-muted="not resultat">
+                                    <field name="etudiant_session_fc_id"/>
+                                    <field name="prerequis_issue" readonly="1"/>
+                                    <field name="resultat" readonly="1"/>
+                                    <button name="action_retirer_du_groupe"
+                                            type="object"
+                                            string="Retirer"
+                                            icon="fa-times"
+                                            confirm="Retirer cet étudiant du groupe ?"
+                                            attrs="{'invisible': [('parent.notes_verrouillees', '=', True)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note_membre_ids"
+                                   attrs="{'readonly': [('notes_verrouillees', '=', True)]}">
+                                <tree editable="bottom" create="0" delete="0"
+                                      decoration-success="resultat in ('admis', 'admis_ap_deliberation')"
+                                      decoration-warning="resultat == 'deliberation'"
+                                      decoration-danger="resultat == 'refuse'"
+                                      decoration-muted="not resultat">
+                                    <field name="etudiant_session_fc_id"/>
+                                    <field name="prerequis_issue" readonly="1" invisible="1"/>
+                                    <field name="note_quizz" attrs="{'readonly': [('prerequis_issue', '!=', False)]}"/>
+                                    <field name="note_intra" attrs="{'readonly': [('prerequis_issue', '!=', False)]}"/>
+                                    <field name="note_examen_final" attrs="{'readonly': [('prerequis_issue', '!=', False)]}"/>
+                                    <field name="moyenne" readonly="1"/>
+                                    <field name="resultat" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_groupe_fc" model="ir.actions.act_window">
+        <field name="name">Groupes FC</field>
+        <field name="res_model">de_inscae.groupe_fc</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

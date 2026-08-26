@@ -1,0 +1,20 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_etudiant_fi" model="ir.sequence">
+            <field name="name">Matricule Étudiant FI</field>
+            <field name="code">de_inscae.etudiant.fi</field>
+            <field name="prefix"></field>
+            <field name="padding">6</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">no_gap</field>
+        </record>
+        <record id="seq_etudiant_fc" model="ir.sequence">
+            <field name="name">Matricule Étudiant FC</field>
+            <field name="code">de_inscae.etudiant.fc</field>
+            <field name="prefix"></field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">no_gap</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="assets_backend" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/de_inscae/static/src/css/planning_widget.css"/>
+            <script type="text/javascript" src="/de_inscae/static/src/js/planning_widget.js"/>
+        </xpath>
+    </template>
+
+    <!-- Action client -->
+    <record id="action_planning_widget" model="ir.actions.client">
+        <field name="name">Planning</field>
+        <field name="tag">de_inscae_planning</field>
+    </record>
+
+</odoo>

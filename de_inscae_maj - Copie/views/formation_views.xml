@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Liste -->
+     <record id="view_formation_tree" model="ir.ui.view"> <!-- Ny Vues rehetra dia stockées ao anaty table ir_ui_views daholo ary io id io no atao identifiant-any (mila unique izany io).  -->
+        <field name="name">de_inscae.formation.tree</field><!-- Ity ny nom technique an'ilay vue. Convention : nom_module.nom_modèle.type_vue -->
+        <field name="model">de_inscae.formation</field><!-- Ilay modèle rattaché amin'ilay vue. (Ilay _name amin'ilay modèle iny no atao eo) -->
+        <field name="arch" type="xml"><!-- Ity ny architecture an'ilay vue -->
+            <tree><!-- Ny dikan'ny hoe tree dia hoe vue liste io. Chaque Field est une colonne du tableau. -->
+                <field name="sigle"/>
+                <field name="intitule"/>
+                <field name="parcours_academique_id"/>
+            </tree>
+        </field>
+     </record>
+     <record id="view_formation_form" model="ir.ui.view">
+        <field name="name">de_inscae.formation.form</field>
+        <field name="model">de_inscae.formation</field>
+        <field name="arch" type="xml">
+            <form><!-- Vue Fiche détail ny dikan'ny hoe form amin'ny Odoo -->
+                <sheet><!-- Le corps de la fiche, comme une feuille de papier -->
+                    <group><!-- Regroupe les champs en 2 colonnes automatiquement -->
+                        <field name="sigle"/>
+                        <field name="intitule"/>
+                        <field name="parcours_academique_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+     </record>
+     <!-- Action -->
+     <record id="action_formation" model="ir.actions.act_window">
+        <field name="name">Formations</field>
+        <field name="res_model">de_inscae.formation</field>
+        <field name="view_mode">tree,form</field>
+     </record>
+</odoo>

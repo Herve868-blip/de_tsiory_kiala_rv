@@ -1,0 +1,7 @@
+from . import wizard_ajout_membre_groupe_fi
+from . import wizard_inscription_depuis_concours_fi
+from . import wizard_inscription_depuis_session_precedente_fi
+from . import wizard_inscription_depuis_concours_fc
+from . import wizard_inscription_depuis_session_precedente_fc
+from . import wizard_inscription_fc_depuis_sessions_fi
+from . import wizard_inscription_groupe_fc

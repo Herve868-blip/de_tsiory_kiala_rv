@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_wizard_inscription_groupe_fc_form" model="ir.ui.view">
+        <field name="name">de_inscae.wizard_inscription_groupe_fc.form</field>
+        <field name="model">de_inscae.wizard_inscription_groupe_fc</field>
+        <field name="arch" type="xml">
+            <form string="Inscrire à un groupe">
+                <group>
+                    <field name="etudiant_session_fc_id" invisible="1"/>
+                    <field name="session_calendrier_fc_id" invisible="1"/>
+                    <field name="matiere_dispo_ids" invisible="1"/>
+                    <field name="matiere_id" domain="[('id', 'in', matiere_dispo_ids)]" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="groupe_fc_id"
+                           attrs="{'invisible': [('matiere_id', '=', False)]}"/>
+                </group>
+                <group string="Avertissements"
+                       attrs="{'invisible': [('prerequis_issue', '=', False), ('conflit_edt', '=', False)]}">
+                    <field name="prerequis_issue"
+                           readonly="1"
+                           attrs="{'invisible': [('prerequis_issue', '=', False)]}"/>
+                    <field name="conflit_edt"
+                           readonly="1"
+                           attrs="{'invisible': [('conflit_edt', '=', False)]}"/>
+                </group>
+                <group string="Informations du groupe"
+                       attrs="{'invisible': [('groupe_fc_id', '=', False)]}">
+                    <field name="prof_id" readonly="1"/>
+                </group>
+                <field name="planning_ids"
+                       readonly="1"
+                       attrs="{'invisible': [('groupe_fc_id', '=', False)]}">
+                    <tree>
+                        <field name="jour_semaine"/>
+                        <field name="tranche_horaire_id"/>
+                        <field name="salle_id"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_confirmer"
+                            string="Inscrire"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_inscription_groupe_fc" model="ir.actions.act_window">
+        <field name="name">Inscrire à un groupe</field>
+        <field name="res_model">de_inscae.wizard_inscription_groupe_fc</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wizard_inscription_groupe_fc_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

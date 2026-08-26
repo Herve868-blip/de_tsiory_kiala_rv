@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_matiere_tree" model="ir.ui.view">
+        <field name="name">de_inscae.matiere.tree</field>
+        <field name="model">de_inscae.matiere</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="intitule"/>
+                <field name="est_demi_matiere"/>
+                <field name="est_amovible"/>
+                <field name="est_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_matiere_form" model="ir.ui.view">
+        <field name="name">de_inscae.matiere.form</field>
+        <field name="model">de_inscae.matiere</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_activer"
+                        string="Activer"
+                        type="object"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('est_active', '=', True)]}"/>
+                    <button
+                        name="action_desactiver"
+                        string="Désactiver"
+                        type="object"
+                        attrs="{'invisible': [('est_active', '=', False)]}"/>
+                    <field name="est_active" widget="statusbar"
+                        statusbar_visible="True"
+                        attrs="{'invisible': [('est_active', '=', True)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="intitule" class="oe_edit_only" string="Intitulé de la matière"/>
+                        <h3>
+                            <field name="intitule" placeholder="Ex: Anglais" style="width: 60%%"/> -
+                            <field name="code" placeholder="Code (ex: ANG)" style="width: 30%%"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <field name="est_amovible"/>
+                        <field name="est_demi_matiere"/>
+                        <field name="matiere_prealable_ids" widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Moitiés Compatibles" attrs="{'invisible': [('est_demi_matiere', '=', False)]}">
+                            <field name="moities_compatibles_ids" context="{'default_est_demi_matiere': True}">
+                                <tree>
+                                    <field name="code"/>
+                                    <field name="intitule"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Sessions de Niveau">
+                            <field name="session_niveau_ids">
+                                <tree editable="bottom">
+                                    <field name="session_niveau_id"/>
+                                    <field name="coefficient_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_matiere" model="ir.actions.act_window">
+        <field name="name">Matières</field>
+        <field name="res_model">de_inscae.matiere</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_equivalence_matiere_tree" model="ir.ui.view">
+        <field name="name">de_inscae.equivalence_matiere.tree</field>
+        <field name="model">de_inscae.equivalence_matiere</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="toutes_sources_requises"/>
+                <field name="est_reciproque"/>
+                <field name="desactiver_sources"/>
+                <field name="desactiver_cibles"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_equivalence_matiere_form" model="ir.ui.view">
+        <field name="name">de_inscae.equivalence_matiere.form</field>
+        <field name="model">de_inscae.equivalence_matiere</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Matières">
+                            <field name="matiere_source_ids" widget="many2many_tags"/>
+                            <field name="matiere_cible_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Options">
+                            <field name="toutes_sources_requises"/>
+                            <field name="est_reciproque"/>
+                            <field name="desactiver_sources"/>
+                            <field name="desactiver_cibles"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_equivalence_matiere" model="ir.actions.act_window">
+        <field name="name">Équivalences</field>
+        <field name="res_model">de_inscae.equivalence_matiere</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
