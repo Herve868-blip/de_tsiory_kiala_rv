@@ -38,7 +38,7 @@ class Individu(models.Model):
     @api.depends('nom', 'prenoms')
     def _compute_nom_complet(self):
         for rec in self:
-            rec.nom_complet = f"{rec.nom} {rec.prenoms}"
+            rec.nom_complet = "{} {}".format(rec.nom, rec.prenoms)
 
 
     @api.onchange('nom', 'prenoms', 'adresse', 'lieu_naissance', 'etablissement_origine',
@@ -75,9 +75,9 @@ class Individu(models.Model):
     def _check_telephones(self):
         for rec in self:
             if rec.telephone and not re.fullmatch(r'(\+261|0)(32|33|34|37|38)\d{7}', rec.telephone):
-                raise ValidationError(f"Le numéro de téléphone est invalide.")
+                raise ValidationError("Le numéro de téléphone est invalide.")
             if rec.telephone_garant and not re.fullmatch(r'(\+261|0)(32|33|34|37|38)\d{7}', rec.telephone_garant):
-                raise ValidationError(f"Le numéro de téléphone du garant est invalide.")
+                raise ValidationError("Le numéro de téléphone du garant est invalide.")
 
     @api.constrains('date_naissance')
     def _check_date_naissance(self):

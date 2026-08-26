@@ -40,8 +40,9 @@ class SessionCalendrier(models.Model):
             if coeffs_manquants:
                 manquants_str = ', '.join(str(c.coefficient) for c in coeffs_manquants)
                 raise ValidationError(
-                    f"La règle '{rec.regle_admission_id.name}' ne couvre pas tous les coefficients "
-                    f"existants : {manquants_str}. Créez une nouvelle règle complète."
+                    "La règle '{}' ne couvre pas tous les coefficients "
+                    "existants : {}. Créez une nouvelle règle complète.".format(
+                        rec.regle_admission_id.name, manquants_str)
                 )
     
     @api.constrains('date_debut', 'date_fin')
@@ -196,14 +197,14 @@ class SessionCalendrierFI(models.Model):
             self.matiere_ids = [(5, 0, 0)] + self._get_lignes_matieres_pour_session_niveau(session_niveau)
 
             if self.annee:
-                self.code = f"{self.session_parente_fi_id.code}-{self.annee}"
-                self.libelle = f"{self.session_parente_fi_id.libelle} {self.annee}"
+                self.code = "{}-{}".format(self.session_parente_fi_id.code, self.annee)
+                self.libelle = "{} {}".format(self.session_parente_fi_id.libelle, self.annee)
 
     @api.onchange('annee')
     def _onchange_annee_generate_code(self):
         if self.session_parente_fi_id and self.annee:
-            self.code = f"{self.session_parente_fi_id.code}-{self.annee}"
-            self.libelle = f"{self.session_parente_fi_id.libelle} {self.annee}"
+            self.code = "{}-{}".format(self.session_parente_fi_id.code, self.annee)
+            self.libelle = "{} {}".format(self.session_parente_fi_id.libelle, self.annee)
 
     @api.model
     def create(self, vals):
@@ -260,8 +261,8 @@ class SessionCalendrierFI(models.Model):
             mois_fin = int(session_parente_fi_suivante.session_parente_id.mois_fin)
             annee_fin = nouvelle_annee + 1 if mois_fin < mois_debut else nouvelle_annee
 
-            date_debut = fields.Date.to_date(f"{nouvelle_annee}-{mois_debut:02d}-01")
-            date_fin = fields.Date.to_date(f"{annee_fin}-{mois_fin:02d}-01")
+            date_debut = fields.Date.to_date("{:04d}-{:02d}-01".format(nouvelle_annee, mois_debut))
+            date_fin = fields.Date.to_date("{:04d}-{:02d}-01".format(annee_fin, mois_fin))
 
             if session_niveau_suivante.niveau_id == session_niveau.niveau_id:
                 matieres_non_selectionnees = self.matiere_ids.filtered(lambda l: not l.est_selectionnee)
@@ -276,8 +277,8 @@ class SessionCalendrierFI(models.Model):
             nouveau = self.env['de_inscae.session_calendrier_fi'].create({
                 'session_parente_fi_id': session_parente_fi_suivante.id,
                 'annee': nouvelle_annee,
-                'code': f"{session_parente_fi_suivante.code}-{nouvelle_annee}",
-                'libelle': f"{session_parente_fi_suivante.libelle} {nouvelle_annee}",
+                'code': "{}-{}".format(session_parente_fi_suivante.code, nouvelle_annee),
+                'libelle': "{} {}".format(session_parente_fi_suivante.libelle, nouvelle_annee),
                 'date_debut': date_debut,
                 'date_fin': date_fin,
                 'matiere_ids': lignes_matieres,
@@ -324,8 +325,8 @@ class SessionCalendrierFI(models.Model):
 
             if session_niveau_prec_reel != session_niveau_precedent_attendu:
                 raise ValidationError(
-                    f"La session précédente doit correspondre au niveau "
-                    f"'{session_niveau_precedent_attendu.intitule}'."
+                    "La session précédente doit correspondre au niveau "
+                    "'{}'.".format(session_niveau_precedent_attendu.intitule)
                 )
 
     @api.constrains('matiere_ids')
@@ -344,7 +345,7 @@ class SessionCalendrierFI(models.Model):
                 compatibles_selectionnees = demi.moities_compatibles_ids & demi_matieres
                 if not compatibles_selectionnees:
                     raise ValidationError(
-                        f"'{demi.intitule}' n'a aucune moitié compatible sélectionnée dans cette session."
+                        "'{}' n'a aucune moitié compatible sélectionnée dans cette session.".format(demi.intitule)
                     )
                 traitees |= demi
                 traitees |= compatibles_selectionnees[:1]
@@ -366,17 +367,17 @@ class SessionCalendrierFI(models.Model):
                 # Toute matière sélectionnée doit appartenir au même niveau
                 if ligne.est_selectionnee and not appartient_au_niveau:
                     raise ValidationError(
-                        f"'{matiere.intitule}' n'appartient pas au niveau de cette session et ne peut pas être sélectionnée."
+                        "'{}' n'appartient pas au niveau de cette session et ne peut pas être sélectionnée.".format(matiere.intitule)
                     )
     
                 if not matiere.est_amovible:
                     if appartient_a_cette_session and not ligne.est_selectionnee:
                         raise ValidationError(
-                            f"'{matiere.intitule}' n'est pas amovible et doit rester sélectionnée dans sa session d'origine."
+                            "'{}' n'est pas amovible et doit rester sélectionnée dans sa session d'origine.".format(matiere.intitule)
                         )
                     if not appartient_a_cette_session and ligne.est_selectionnee:
                         raise ValidationError(
-                            f"'{matiere.intitule}' n'est pas amovible et ne peut pas être sélectionnée hors de sa session d'origine."
+                            "'{}' n'est pas amovible et ne peut pas être sélectionnée hors de sa session d'origine.".format(matiere.intitule)
                         )
 
     def _recalculer_tout(self):
@@ -544,8 +545,8 @@ class SessionCalendrierFC(models.Model):
     @api.onchange('session_parente_fc_id', 'annee')
     def _onchange_generate_code_libelle(self):
         if self.session_parente_fc_id and self.annee:
-            self.code = f"{self.session_parente_fc_id.code}-{self.annee}"
-            self.libelle = f"{self.session_parente_fc_id.libelle} {self.annee}"
+            self.code = "{}-{}".format(self.session_parente_fc_id.code, self.annee)
+            self.libelle = "{} {}".format(self.session_parente_fc_id.libelle, self.annee)
 
     def _recalculer_tout(self):
         self.ensure_one()
@@ -667,8 +668,8 @@ class MatiereDispoSessionFC(models.Model):
         if not snm:
             matiere = self.env['de_inscae.matiere'].browse(matiere_id)
             raise ValidationError(
-                f"La matière '{matiere.intitule}' n'appartient à aucune session de niveau "
-                f"du parcours Licence — elle ne peut pas être ajoutée à une session FC."
+                "La matière '{}' n'appartient à aucune session de niveau "
+                "du parcours Licence — elle ne peut pas être ajoutée à une session FC.".format(matiere.intitule)
             )
         return snm.coefficient_id
 

@@ -222,7 +222,7 @@ class GroupeFI(models.Model):
         if matieres_non_verrouillees:
             noms = ', '.join(matieres_non_verrouillees.mapped('matiere_id.intitule'))
             raise ValidationError(
-                f"Les notes des matières suivantes ne sont pas encore verrouillées : {noms}."
+                "Les notes des matières suivantes ne sont pas encore verrouillées : {}.".format(noms)
             )
 
         regle, admission_min, deliberation_min = self._get_regle_et_seuils()
@@ -251,7 +251,7 @@ class GroupeFI(models.Model):
             'tag': 'display_notification',
             'params': {
                 'title': 'Moyennes calculées',
-                'message': f"Moyennes générales calculées pour {len(self.membre_ids)} étudiant(s).",
+                'message': "Moyennes générales calculées pour {} étudiant(s).".format(len(self.membre_ids)),
                 'type': 'success',
                 'sticky': False,
             }
@@ -286,7 +286,7 @@ class MatiereProfGroupeFI(models.Model):
     def _compute_name(self):
         for rec in self:
             if rec.groupe_fi_id and rec.session_calendrier_fi_matiere_id:
-                rec.name = f"{rec.groupe_fi_id.nom} - {rec.session_calendrier_fi_matiere_id.matiere_id.intitule}"
+                rec.name = "{} - {}".format(rec.groupe_fi_id.nom, rec.session_calendrier_fi_matiere_id.matiere_id.intitule)
             else:
                 rec.name = "Affectation Incomplète"
     
@@ -295,8 +295,8 @@ class MatiereProfGroupeFI(models.Model):
         for rec in self:
             if not rec.session_calendrier_fi_matiere_id.est_selectionnee:
                 raise ValidationError(
-                    f"'{rec.session_calendrier_fi_matiere_id.matiere_id.intitule}' n'est pas une matière sélectionnée de la session. "
-                    "Seules les matières sélectionnées peuvent être affectées à un groupe."
+                    "'{}' n'est pas une matière sélectionnée de la session. "
+                    "Seules les matières sélectionnées peuvent être affectées à un groupe.".format(rec.session_calendrier_fi_matiere_id.matiere_id.intitule)
                 )
 
     @api.constrains('groupe_fi_id', 'session_calendrier_fi_matiere_id')
@@ -349,8 +349,8 @@ class MatiereProfGroupeFI(models.Model):
             total = rec.ponderation_quizz + rec.ponderation_intra + rec.ponderation_examen_final
             if abs(total - 100) > 0.01:
                 raise ValidationError(
-                    f"La somme des pondérations pour '{rec.matiere_id.intitule}' doit être égale à 100. "
-                    f"Actuellement, elle est de {total}."
+                    "La somme des pondérations pour '{}' doit être égale à 100. "
+                    "Actuellement, elle est de {}.".format(rec.matiere_id.intitule, total)
                 )
 
     def _get_detail_regle(self, regle, coeff_pour_regle):
@@ -358,7 +358,7 @@ class MatiereProfGroupeFI(models.Model):
         detail = regle.detail_ids.filtered(lambda d: d.coefficient_id == coeff_pour_regle)
         if not detail:
             raise ValidationError(
-                f"Aucune règle d'admission trouvée pour le coefficient {coeff_pour_regle.coefficient}."
+                "Aucune règle d'admission trouvée pour le coefficient {}.".format(coeff_pour_regle.coefficient)
             )
         return detail[0]
 
@@ -375,12 +375,12 @@ class MatiereProfGroupeFI(models.Model):
 
         if not moitie_mpgfi:
             raise ValidationError(
-                f"Aucune matière moitié compatible trouvée pour '{matiere.intitule}' dans ce groupe."
+                "Aucune matière moitié compatible trouvée pour '{}' dans ce groupe.".format(matiere.intitule)
             )
         if moitie_mpgfi.session_calendrier_fi_matiere_id.coefficient_id != coefficient:
             raise ValidationError(
-                f"Les deux moitiés '{matiere.intitule}' et "
-                f"'{moitie_mpgfi.matiere_id.intitule}' doivent avoir le même coefficient."
+                "Les deux moitiés '{}' et "
+                "'{}' doivent avoir le même coefficient.".format(matiere.intitule, moitie_mpgfi.matiere_id.intitule)
             )
 
         coeff_combine = self.env['de_inscae.coefficient'].search([
@@ -388,9 +388,9 @@ class MatiereProfGroupeFI(models.Model):
         ], limit=1)
         if not coeff_combine:
             raise ValidationError(
-                f"Le coefficient combiné {coefficient.coefficient * 2} "
-                f"(= {coefficient.coefficient} + {coefficient.coefficient}) "
-                f"n'existe pas dans la table des coefficients."
+                "Le coefficient combiné {} "
+                "(= {} + {}) "
+                "n'existe pas dans la table des coefficients.".format(coefficient.coefficient * 2, coefficient.coefficient, coefficient.coefficient)
             )
 
         return moitie_mpgfi, coeff_combine
@@ -418,8 +418,8 @@ class MatiereProfGroupeFI(models.Model):
             )
             if not note_moitie:
                 raise ValidationError(
-                    f"Note manquante pour la moitié compatible de "
-                    f"'{self.session_calendrier_fi_matiere_id.matiere_id.intitule}'."
+                    "Note manquante pour la moitié compatible de "
+                    "'{}'.".format(self.session_calendrier_fi_matiere_id.matiere_id.intitule)
                 )
             return (note.moyenne + note_moitie[0].moyenne) / 2.0, note_moitie[0]
         return note.moyenne, None
@@ -448,8 +448,8 @@ class MatiereProfGroupeFI(models.Model):
                 existante.unlink()
             else:
                 raise ValidationError(
-                    f"Une tentative existe déjà pour '{matiere.intitule}' "
-                    f"et l'étudiant '{etudiant.name}' dans cette session."
+                    "Une tentative existe déjà pour '{}' "
+                    "et l'étudiant '{}' dans cette session.".format(matiere.intitule, etudiant.name)
                 )
 
         self.env['de_inscae.tentative_matiere_etudiant'].create({
@@ -647,7 +647,7 @@ class GroupeFC(models.Model):
         detail = regle.detail_ids.filtered(lambda d: d.coefficient_id == coefficient)
         if not detail:
             raise ValidationError(
-                f"Aucune règle d'admission trouvée pour le coefficient {coefficient.coefficient}."
+                "Aucune règle d'admission trouvée pour le coefficient {}.".format(coefficient.coefficient)
             )
         detail = detail[0]
 
@@ -672,8 +672,8 @@ class GroupeFC(models.Model):
                 ], limit=1)
                 if deja_existante:
                     raise ValidationError(
-                        f"Une tentative existe déjà pour '{matiere.intitule}' "
-                        f"et l'étudiant '{etudiant.name}' dans cette session."
+                    "Une tentative existe déjà pour '{}' "
+                    "et l'étudiant '{}' dans cette session.".format(matiere.intitule, etudiant.name)
                     )
                 self.env['de_inscae.tentative_matiere_etudiant'].create({
                     'etudiant_id': etudiant.id,
@@ -694,7 +694,7 @@ class GroupeFC(models.Model):
             'tag': 'display_notification',
             'params': {
                 'title': 'Notes verrouillées',
-                'message': f"Notes verrouillées pour {len(self.membre_ids)} étudiant(s).",
+                'message': "Notes verrouillées pour {} étudiant(s).".format(len(self.membre_ids)),
                 'type': 'success',
                 'sticky': False,
             }

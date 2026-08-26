@@ -22,7 +22,7 @@ class Etudiant(models.Model):
     @api.depends('individu_id.nom_complet', 'matricule')
     def _compute_name(self):
         for record in self:
-            record.name = (f" [{record.matricule}]" if record.matricule else '') + " - " + record.individu_id.nom_complet
+            record.name = (" [{}]".format(record.matricule) if record.matricule else '') + " - " + record.individu_id.nom_complet
 
     _sql_constraints = [
         ('matricule_unique', 'UNIQUE(matricule)', 'Ce matricule est déjà utilisé.'),
@@ -39,7 +39,7 @@ class Etudiant(models.Model):
         if deja_inscrit:
             individu = self.env['de_inscae.individu'].browse(individu_id)
             raise ValidationError(
-                f"'{individu.nom_complet}' est déjà étudiant actif en {deja_inscrit.formation_id.sigle}."
+                "'{}' est déjà étudiant actif en {}.".format(individu.nom_complet, deja_inscrit.formation_id.sigle)
             )
 
 class TentativeMatiereEtudiant(models.Model):
@@ -77,7 +77,7 @@ class EtudiantFI(models.Model):
         brut = self.env['ir.sequence'].next_by_code('de_inscae.etudiant.fi')
         if not brut:
             raise ValidationError("La séquence de matricule FI n'est pas configurée.")
-        return f"{brut[:3]} {brut[3:]}"
+        return "{} {}".format(brut[:3], brut[3:])
 
     def unlink(self):
         etudiant_ids = self.mapped('etudiant_id')
@@ -246,12 +246,12 @@ class EtudiantFC(models.Model):
         brut = self.env['ir.sequence'].next_by_code('de_inscae.etudiant.fc')
         if not brut:
             raise ValidationError("La séquence de matricule FC n'est pas configurée.")
-        return f"CA {brut}"
+        return "CA {}".format(brut)
 
     @api.depends('etudiant_id.individu_id.nom_complet', 'matricule')
     def _compute_name(self):
         for record in self:
-            record.name = (f" [{record.etudiant_id.matricule}]" if record.etudiant_id.matricule else '') + " - " + record.etudiant_id.individu_id.nom_complet
+            record.name = (" [{}]".format(record.etudiant_id.matricule) if record.etudiant_id.matricule else '') + " - " + record.etudiant_id.individu_id.nom_complet
 
 
     def unlink(self):
@@ -396,7 +396,7 @@ class EtudiantGroupeFC(models.Model):
         ], limit=1)
         if deja_inscrit:
             raise ValidationError(
-                f"'{etudiant.name}' est déjà inscrit à un groupe pour la matière '{matiere.intitule}'."
+                "'{}' est déjà inscrit à un groupe pour la matière '{}'.".format(etudiant.name, matiere.intitule)
             )
 
         return super().create(vals)
@@ -453,7 +453,7 @@ class EtudiantGroupeFC(models.Model):
                 ('Examen Final', rec.note_examen_final),
             ]:
                 if valeur < 0 or valeur > 20:
-                    raise ValidationError(f"La note '{champ}' doit être comprise entre 0 et 20.")
+                    raise ValidationError("La note '{}' doit être comprise entre 0 et 20.".format(champ))
 
     @api.constrains('groupe_fc_id', 'etudiant_session_fc_id')
     def _check_coherence_session(self):

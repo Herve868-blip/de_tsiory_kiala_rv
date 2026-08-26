@@ -27,7 +27,7 @@ class CandidatConcours(models.Model):
     @api.depends('individu_id', 'concours_id')
     def _compute_nom_complet(self):
         for rec in self:
-            rec.nom_candidat = f"{rec.individu_id.nom} {rec.individu_id.prenoms}"
+            rec.nom_candidat = "{} {}".format(rec.individu_id.nom, rec.individu_id.prenoms)
 
     def action_transformer_en_etudiant(self):
         self.ensure_one()
@@ -44,7 +44,7 @@ class CandidatConcours(models.Model):
         elif formation.sigle == 'FC':
             return self._transformer_en_etudiant_fc()
         else:
-            raise ValidationError(f"Sigle de formation non géré : '{formation.sigle}'.")
+            raise ValidationError("Sigle de formation non géré : '{}'.".format(formation.sigle))
 
 
     def _transformer_en_etudiant_fi(self):

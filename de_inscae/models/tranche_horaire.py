@@ -38,5 +38,5 @@ class TrancheHoraire(models.Model):
             ])
             if chevauchements:
                 raise ValidationError(
-                    f"La tranche horaire chevauche avec : {', '.join(chevauchements.mapped('code'))}"
+                    "La tranche horaire chevauche avec : {}".format(', '.join(chevauchements.mapped('code')))
                 )

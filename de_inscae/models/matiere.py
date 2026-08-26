@@ -88,7 +88,7 @@ class Matiere(models.Model):
                 for autre in sessions:
                     if autre.id != session.id and autre.id in ancetres:
                         raise ValidationError(
-                            f"La matière '{rec.intitule}' ne peut pas apparaître dans deux sessions de la même chaîne."
+                            "La matière '{}' ne peut pas apparaître dans deux sessions de la même chaîne.".format(rec.intitule)
                         )
 
     @api.constrains('moities_compatibles_ids', 'est_demi_matiere')
@@ -100,11 +100,11 @@ class Matiere(models.Model):
                 niveaux_rec = set(rec.session_niveau_ids.mapped('session_niveau_id.niveau_id.id'))
                 for compatible in rec.moities_compatibles_ids:
                     if not compatible.est_demi_matiere:
-                        raise ValidationError(f"'{compatible.intitule}' n'est pas une demi-matière.")
+                        raise ValidationError("'{}' n'est pas une demi-matière.".format(compatible.intitule))
                     niveaux_compatible = set(compatible.session_niveau_ids.mapped('session_niveau_id.niveau_id.id'))
                     if not niveaux_rec.intersection(niveaux_compatible):
                         raise ValidationError(
-                            f"'{compatible.intitule}' n'appartient pas au même niveau que '{rec.intitule}'."
+                            "'{}' n'appartient pas au même niveau que '{}'.".format(compatible.intitule, rec.intitule)
                         )
 
     def _sync_moities_compatibles(self):

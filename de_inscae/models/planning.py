@@ -82,9 +82,9 @@ class Planning(models.Model):
         jours = {'1': 'Lun', '2': 'Mar', '3': 'Mer', '4': 'Jeu', '5': 'Ven', '6': 'Sam'}
         for rec in self:
             if rec.groupe_id and rec.matiere_id and rec.jour_semaine and rec.tranche_horaire_id:
-                rec.name = (
-                    f"{rec.groupe_id.nom} - {rec.matiere_id.intitule} - "
-                    f"{jours[rec.jour_semaine]} {rec.tranche_horaire_id.code}"
+                rec.name = "{} - {} - {} {}".format(
+                    rec.groupe_id.nom, rec.matiere_id.intitule,
+                    jours[rec.jour_semaine], rec.tranche_horaire_id.code
                 )
             else:
                 rec.name = "Planning incomplet"
@@ -164,8 +164,9 @@ class Planning(models.Model):
             ], limit=1)
             if conflit:
                 raise ValidationError(
-                    f"La salle '{rec.salle_id.numero}' est déjà occupée ce créneau "
-                    f"par le groupe '{conflit.groupe_id.nom}'."
+                    "La salle '{}' est déjà occupée ce créneau par le groupe '{}'.".format(
+                        rec.salle_id.numero, conflit.groupe_id.nom
+                    )
                 )
 
     @api.constrains('prof_id', 'jour_semaine', 'tranche_horaire_id', 'date_debut', 'date_fin')
@@ -181,8 +182,9 @@ class Planning(models.Model):
             ], limit=1)
             if conflit:
                 raise ValidationError(
-                    f"Le professeur '{rec.prof_id.nomcomplet}' est déjà occupé ce créneau "
-                    f"par le groupe '{conflit.groupe_id.nom}'."
+                    "Le professeur '{}' est déjà occupé ce créneau par le groupe '{}'.".format(
+                        rec.prof_id.nomcomplet, conflit.groupe_id.nom
+                    )
                 )
 
     @api.constrains('groupe_id', 'jour_semaine', 'tranche_horaire_id', 'date_debut', 'date_fin')
@@ -198,6 +200,7 @@ class Planning(models.Model):
             ], limit=1)
             if conflit:
                 raise ValidationError(
-                    f"Le groupe '{rec.groupe_id.nom}' a déjà un cours ce créneau : "
-                    f"'{conflit.matiere_id.intitule}'."
+                    "Le groupe '{}' a déjà un cours ce créneau : '{}'.".format(
+                        rec.groupe_id.nom, conflit.matiere_id.intitule
+                    )
                 )

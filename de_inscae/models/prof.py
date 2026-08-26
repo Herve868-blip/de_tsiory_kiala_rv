@@ -30,7 +30,7 @@ class Prof(models.Model):
     @api.depends('appellation', 'nomcomplet')
     def _compute_name(self):
         for rec in self:
-            rec.name = f"{rec.appellation} {rec.nomcomplet}" if rec.appellation and rec.nomcomplet else rec.nomcomplet
+            rec.name = "{} {}".format(rec.appellation, rec.nomcomplet) if rec.appellation and rec.nomcomplet else rec.nomcomplet
 
     @api.constrains('email')
     def _check_email_format(self):
@@ -56,5 +56,5 @@ class Prof(models.Model):
     def _check_telephones(self):
         for rec in self:
             if rec.telephone and not re.fullmatch(r'(\+261|0)(32|33|34|37|38)\d{7}', rec.telephone):
-                raise ValidationError(f"Le numéro de téléphone est invalide.")
+                raise ValidationError("Le numéro de téléphone est invalide.")
 

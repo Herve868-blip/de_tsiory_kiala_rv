@@ -47,8 +47,8 @@ class RegleAdmission(models.Model):
         if coeffs_manquants:
             manquants_str = ', '.join(str(c.coefficient) for c in coeffs_manquants)
             raise ValidationError(
-                f"La règle doit couvrir tous les coefficients existants. "
-                f"Coefficients manquants : {manquants_str}."
+                "La règle doit couvrir tous les coefficients existants. "
+                "Coefficients manquants : {}.".format(manquants_str)
             )
         return record
 
