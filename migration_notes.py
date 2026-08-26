@@ -14,7 +14,7 @@ SHEET_NAME = 'Base_All'
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'dbname': 'Herv',        # Nom de la base Odoo
+    'dbname': 'RV',           # Nom de la base Odoo
     'user': 'odoo',          # Utilisateur PostgreSQL
     'password': 'odoo',      # Mot de passe PostgreSQL
 }
