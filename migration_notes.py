@@ -8,7 +8,7 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 # ============================================================
 # CONFIG - MODIFIEZ CES PARAMETRES SI BESOIN
 # ============================================================
-EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'de_inscae', 'Gest°_Notes_S°Août 2025.xlsx')
+EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'de_inscae', 'Gest_Notes_Aout_2025.xlsx')
 SHEET_NAME = 'Base_All'
 
 DB_CONFIG = {
